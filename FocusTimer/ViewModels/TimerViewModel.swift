@@ -15,8 +15,8 @@ class TimerViewModel: ObservableObject {
     var seconds: Int
     private var timerExtract: TimerExtract?
     private var timer: Timer.TimerPublisher
-    @Published private var cancellable: Cancellable?
     @Published var isTimerRunning: Bool
+    @Published private var cancellable: Cancellable?
     
     init() {
         self.hours = 0
@@ -68,6 +68,7 @@ class TimerViewModel: ObservableObject {
     func timerStop() -> Void {
         cancellable?.cancel()
         cancellable = nil
+        timer = Timer.publish(every: 1, on: .main, in: .common)
         isTimerRunning = false
     }
     

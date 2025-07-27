@@ -9,7 +9,7 @@ struct ContentView: View {
             Color.onyxCol
                 .ignoresSafeArea()
             
-            TimerView(hours: 00, minutes: 00, seconds: 10)
+            TimerView(hours: 00, minutes: 25, seconds: 0)
         }
     }
 }

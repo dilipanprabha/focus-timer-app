@@ -43,7 +43,7 @@ struct TimerView: View {
                         print("All values are zero")
                         return
                     }
-                    
+                    print("start")
                     timerViewModel.timerStart()
                 }
                 
@@ -52,6 +52,7 @@ struct TimerView: View {
                             print("Not started yet")
                             return
                         }
+                        print("stop")
                         timerViewModel.timerStop()
                     }
                 
@@ -61,6 +62,7 @@ struct TimerView: View {
                             print("Not started yet")
                             return
                         }
+                        print("reset")
                         timerViewModel.timerStop()
                 }
         }
