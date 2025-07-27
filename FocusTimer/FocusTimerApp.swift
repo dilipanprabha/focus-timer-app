@@ -15,10 +15,3 @@ struct FocusTimerApp: App {
         }
     }
 }
-
-extension Color {
-    static let onyxCol = Color("Onyx")
-    static let cadGrey = Color("CadetGrey")
-    static let africanVioletCol = Color("African Violet")
-    static let sprinBudCol = Color("Spring Bud")
-}

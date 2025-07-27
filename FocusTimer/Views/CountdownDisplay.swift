@@ -1,10 +1,18 @@
 import SwiftUI
+import Combine
 
-struct TimerBox: View {
+struct CountdownDisplay: View {
     
     var hours: Int
     var minutes: Int
     var seconds: Int
+    
+    init(hours: Int, minutes: Int, seconds: Int) {
+        self.hours = hours
+        self.minutes = minutes
+        self.seconds = seconds
+        print("Countdown initialized")
+    }
     
     var body: some View {
         HStack(alignment: .bottom) {
@@ -38,4 +46,8 @@ struct TimerBox: View {
         .shadow(color: Color.sprinBudCol.opacity(0.7), radius: 7)
         .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
     }
+}
+
+#Preview {
+    CountdownDisplay(hours: 0, minutes: 0, seconds: 10)
 }
