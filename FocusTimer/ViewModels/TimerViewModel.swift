@@ -10,21 +10,29 @@ import Combine
 class TimerViewModel: ObservableObject {
     
     private var count: Int
-    var hours: Int
-    var minutes: Int
-    var seconds: Int
+    private var hours: Int
+    private var minutes: Int
+    private var seconds: Int
+    private var currentSec: Int
+    private var progress: Double
+    private var totalSeconds: Int
+    private var isStarted: Bool
     private var timerExtract: TimerExtract?
     private var timer: Timer.TimerPublisher
-    @Published var isTimerRunning: Bool
-    @Published private var cancellable: Cancellable?
+    private var cancellable: Cancellable?
+    @Published private var isTimerRunning: Bool
     
-    init() {
-        self.hours = 0
-        self.minutes = 0
-        self.seconds = 0
+    init(hours: Int, minutes: Int, seconds: Int) {
         self.count = 1
+        self.hours = hours
+        self.minutes = minutes
+        self.seconds = seconds
+        self.currentSec = 0
+        self.progress = 0
+        self.isStarted = false
+        self.totalSeconds = (hours * 60 * 60) + (minutes * 60) + seconds
         self.isTimerRunning = false
-        timer = Timer.publish(every: 1, on: .main, in: .common)
+        self.timer = Timer.publish(every: 1, on: .main, in: .common)
         print("Timer View Model is initialized")
     }
     
@@ -61,6 +69,7 @@ class TimerViewModel: ObservableObject {
     func timerStart() -> Void {
         cancellable = timer.connect()
         isTimerRunning = true
+        isStarted = true
         timerExtract = TimerExtract(hours: hours, minutes: minutes, seconds: seconds)
     }
     
@@ -74,9 +83,9 @@ class TimerViewModel: ObservableObject {
     
     // set hours, minutes, and seconds into zero
     func timerReset() -> Void {
-        hours = 0
-        minutes = 0
-        seconds = 0
+        timerExtract?.makeTimerZero()
+        isStarted = false
+        timerStop()
     }
     
     func isTimerRun() -> Bool {
@@ -85,5 +94,27 @@ class TimerViewModel: ObservableObject {
     
     func isTimeZero() -> Bool {
         return (minutes == 0 && seconds == 0 && hours == 0)
+    }
+    
+    // helper function for getProgress
+    func getCurrentSecond() -> Int {
+        currentSec = timerExtract?.getCurrentSecond() ?? 0
+        return currentSec
+    }
+    
+    func getProgress() -> CGFloat {
+        if !isStarted {
+            print("it called so not full circle")
+            return 0
+        }
+        print("Current Second: \(getCurrentSecond())")
+        print("Total Second: \(totalSeconds)")
+        print("progresses: \(Double(totalSeconds - getCurrentSecond()) / Double(totalSeconds))")
+        progress = Double(totalSeconds - getCurrentSecond()) / Double(totalSeconds)
+        return progress
+    }
+    
+    func getPrecen(progress: Double) -> Int {
+        return Int(progress * (Double(1000) / Double(totalSeconds)))
     }
 }

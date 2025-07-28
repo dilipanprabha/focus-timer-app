@@ -53,5 +53,16 @@ class TimerExtract {
         
         return hours / 3600
     }
-
+    
+    func makeTimerZero() -> Void {
+        hours = 0
+        minutes = 0
+        seconds = 0
+        print("called")
+        print("h: \(hours); m: \(minutes); s: \(seconds)")
+    }
+    
+    func getCurrentSecond() -> Int {
+        return hours
+    }
 }
