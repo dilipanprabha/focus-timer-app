@@ -9,10 +9,6 @@ struct CountdownDisplayView: View {
     @ObservedObject var timerViewModel: TimerViewModel
     
     var body: some View {
-        HStackLayout(alignment: .center) {
-            Text("\(timerViewModel.getPrecen(progress: timerViewModel.getProgress()))%")
-                .font(.caption)
-        }
         HStack(alignment: .bottom) {
             VStack {
                 Text("hr")
@@ -22,6 +18,8 @@ struct CountdownDisplayView: View {
             Text(" : ")
                 .font(.custom("xxlarge", size: 50))
             VStack {
+                Text("\(timerViewModel.getPrecen())%")
+                    .font(.caption).padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
                 Text("min")
                     .font(.caption2)
                 Text((minutes < 10 && minutes >= 0) ? "0\(minutes)" : "\(minutes)")

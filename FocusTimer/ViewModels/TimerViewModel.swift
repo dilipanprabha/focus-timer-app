@@ -13,7 +13,6 @@ class TimerViewModel: ObservableObject {
     private var hours: Int
     private var minutes: Int
     private var seconds: Int
-    private var currentSec: Int
     private var progress: Double
     private var totalSeconds: Int
     private var isStarted: Bool
@@ -27,7 +26,6 @@ class TimerViewModel: ObservableObject {
         self.hours = hours
         self.minutes = minutes
         self.seconds = seconds
-        self.currentSec = 0
         self.progress = 0
         self.isStarted = false
         self.totalSeconds = (hours * 60 * 60) + (minutes * 60) + seconds
@@ -98,23 +96,21 @@ class TimerViewModel: ObservableObject {
     
     // helper function for getProgress
     func getCurrentSecond() -> Int {
-        currentSec = timerExtract?.getCurrentSecond() ?? 0
-        return currentSec
+        return timerExtract?.getCurrentSecond() ?? 0
     }
     
     func getProgress() -> CGFloat {
         if !isStarted {
-            print("it called so not full circle")
             return 0
         }
-        print("Current Second: \(getCurrentSecond())")
-        print("Total Second: \(totalSeconds)")
-        print("progresses: \(Double(totalSeconds - getCurrentSecond()) / Double(totalSeconds))")
         progress = Double(totalSeconds - getCurrentSecond()) / Double(totalSeconds)
         return progress
     }
     
-    func getPrecen(progress: Double) -> Int {
-        return Int(progress * (Double(1000) / Double(totalSeconds)))
+    func getPrecen() -> Int {
+        if !isStarted {
+            return 0
+        }
+        return 100 - Int((Double(getCurrentSecond()) / Double(totalSeconds)) * Double(100))
     }
 }

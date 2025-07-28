@@ -29,6 +29,6 @@ struct TimerView: View {
 
 
 #Preview {
-    TimerView(hours: 0, minutes: 0, seconds: 10)
+    TimerView(hours: 0, minutes: 1, seconds: 1)
 }
 
