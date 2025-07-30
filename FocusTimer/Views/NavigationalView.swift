@@ -10,7 +10,7 @@ import SwiftUI
 struct NavigationalView: View {
     
     private let sessionViewModel: SessionViewModel = SessionViewModel()
-    @State private var sesseionWrapper: SessionWrapper?
+    @State private var isDelete: Bool = false
     @State private var offsetValue: CGFloat = 0.0
     @State private var sessions: [Session]
     @ObservedObject var timerViewModel: TimerViewModel
@@ -24,19 +24,17 @@ struct NavigationalView: View {
     
     var body: some View {
         HStack {
-            if sessions.isEmpty {
+            if sessions.isEmpty && !isDelete {
                 NavigationLink(value: "Nothing is here!🙈") {
                     HStack(alignment: .center) {
                         Text("Go to Details")
-                        Image(systemName: "empty")
-                            .opacity(0.5)
                     }
                     .navigationDestination(for: String.self) { value in
                         Text(value)
                     }
                 }
             } else {
-                NavigationLink(value: SessionWrapper(sessions: sessions)) {
+                NavigationLink(value: "") {
                     HStack(alignment: .center) {
                         Text("Go to Details")
                         Image(systemName: "chevron.right")
@@ -47,8 +45,8 @@ struct NavigationalView: View {
                                 }
                             }
                     }
-                    .navigationDestination(for: SessionWrapper.self, destination: {value in
-                        HistoryView(sessionsWrapper: value, timerViewModel: timerViewModel)
+                    .navigationDestination(for: String.self, destination: {_ in
+                        HistoryView(isDelete: $isDelete, sessions: $sessions, timerViewModel: timerViewModel)
                     })
                 }
             }

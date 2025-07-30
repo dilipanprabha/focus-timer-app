@@ -24,9 +24,9 @@ struct HomeView: View {
             
             ControlPanelView(title: "Start", color: .mint) {
                 
-                let hours = Int(hours)!
-                let minutes = Int(minutes)!
-                let seconds = Int(seconds)!
+                let hours = Int(hours) ?? 0
+                let minutes = Int(minutes) ?? 0
+                let seconds = Int(seconds) ?? 0
                 
                 if hours == 0 && minutes == 0 && seconds == 0 {
                     isStart = false

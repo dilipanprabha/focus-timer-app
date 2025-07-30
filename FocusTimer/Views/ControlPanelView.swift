@@ -15,7 +15,7 @@ struct ControlPanelView: View {
             .font(.title2)
             .kerning(5)
             .textCase(.uppercase)
-            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.white, lineWidth: 1))
+            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.primary, lineWidth: 1))
             .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
     }
 }

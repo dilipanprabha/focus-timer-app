@@ -10,6 +10,15 @@ import Foundation
 class SessionViewModel: ObservableObject {
     private var sessions: [Session] = []
     
+    func getSessions() -> [Session] {
+        loadSession()
+        return sessions
+    }
+    
+    func setSessions(_ session: [Session]) -> Void {
+        sessions = session
+    }
+    
     func addSession(_ id: UUID, _ duration: Int, _ date: Date, _ isCompleted: Bool) {
         let newSession = Session(id: id, duration: duration, completed: date, isFinished: isCompleted)
         sessions.append(newSession)
@@ -62,10 +71,5 @@ class SessionViewModel: ObservableObject {
             return
         }
         sessions = []
-    }
-    
-    func getSessions() -> [Session] {
-        loadSession()
-        return sessions
     }
 }

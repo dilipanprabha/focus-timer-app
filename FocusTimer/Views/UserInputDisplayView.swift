@@ -30,7 +30,7 @@ struct UserInputDisplayView: View {
                 Text("min")
                 Text("sec")
             }
-            .foregroundStyle(.white)
+            .foregroundStyle(.primary)
             .font(.caption2)
             .bold()
             .frame(width: 350)

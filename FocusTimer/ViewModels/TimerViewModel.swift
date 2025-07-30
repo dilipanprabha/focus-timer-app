@@ -154,12 +154,6 @@ class TimerViewModel: ObservableObject {
         print("🔔 Warning vibrate now!")
     }
     
-    func deleteAllSession() -> Void {
-        sessionViewModel.loadSession()
-        sessionViewModel.deleteAll()
-        sessionViewModel.saveSession()
-    }
-    
     func isTimeZero() -> Bool {
         return (minutes == 0 && seconds == 0 && hours == 0)
     }
