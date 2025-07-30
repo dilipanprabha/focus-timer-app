@@ -11,4 +11,5 @@ extension Color {
     static let cadGrey = Color("CadetGrey")
     static let africanVioletCol = Color("African Violet")
     static let sprinBudCol = Color("Spring Bud")
+    static let lightOrangeCol = Color("Light Orange")
 }

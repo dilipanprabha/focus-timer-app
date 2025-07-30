@@ -5,6 +5,8 @@
 //  Created by Dilipan Prabha on 26/07/25.
 //
 
+import Foundation
+
 class TimerExtract {
     private var hours: Int
     private var minutes: Int 
@@ -58,11 +60,17 @@ class TimerExtract {
         hours = 0
         minutes = 0
         seconds = 0
-        print("called")
+        print("MakeTimeZero in TimeExtract called")
         print("h: \(hours); m: \(minutes); s: \(seconds)")
     }
     
     func getCurrentSecond() -> Int {
         return hours
+    }
+    
+    func completedAt(_ date: Date, _ totalSeconds: Int) -> Date {
+        let calendar = Calendar.current
+        let expectedDate = calendar.date(byAdding: .second, value: totalSeconds, to: date)
+        return expectedDate!
     }
 }
