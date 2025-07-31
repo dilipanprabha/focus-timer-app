@@ -12,34 +12,67 @@ struct RunningTimerView: View {
     private let controlPanelViewModel = ControlPanelViewModel()
     @Binding var isStart: Bool
     @ObservedObject var timerViewModel: TimerViewModel
+    @Environment(\.colorScheme) var colorScheme
     
     
     var body: some View {
         
         VStack(spacing: 15) {
-//            CountdownDisplayView(hours: $hours, minutes: $minutes, seconds: $seconds, isStart: $isStart, timerViewModel: timerViewModel)
+            
             CountdownDisplayView(isStart: $isStart, timerViewModel: timerViewModel)
             
-            ControlPanelView(title: "Resume", color: .africanVioletCol) {
-                controlPanelViewModel.resumeFun(timerViewModel)
-            }
+            VStack(spacing: 15) {
+                Button(action: {
+                    controlPanelViewModel.resumeFun(timerViewModel)
+                }) {
+                    Text("RESUME")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.purple)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .shadow(radius: 4)
+                }
+                .padding(.horizontal, 40)
                 
-            ControlPanelView(title: "Stop", color: .africanVioletCol) {
-                controlPanelViewModel.stopFun(timerViewModel)
-            }
+                Button(action: {
+                    controlPanelViewModel.stopFun(timerViewModel)
+                }) {
+                    Text("STOP")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.purple, lineWidth: 2)
+                        )
+                        .foregroundColor(Color.purple)
+                }
+                .padding(.horizontal, 40)
                 
-            ControlPanelView(title: "Reset", color: .africanVioletCol) {
-//                hours = 0
-//                minutes = 0
-//                seconds = 0
-//                timerViewModel.setHour(0)
-//                timerViewModel.setMinute(0)
-//                timerViewModel.setSecond(0)
-                timerViewModel.setTimer(hours: 0, minutes: 0, seconds: 0)
-                isStart = false
-                controlPanelViewModel.resetFun(timerViewModel)
+                Button(action: {
+                    timerViewModel.setTimer(hours: 0, minutes: 0, seconds: 0)
+                    isStart = false
+                    controlPanelViewModel.resetFun(timerViewModel)
+                }) {
+                    Text("RESET")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(
+                            colorScheme == .dark ?
+                                Color.purple.opacity(0.6) :
+                                Color.purple.opacity(0.3)
+                        )
+                        .foregroundColor(
+                            colorScheme == .dark ? .white : .black
+                        )
+                        .cornerRadius(12)
+                }
+                .padding(.horizontal, 40)
             }
+            .padding(.vertical)
         }
-        
     }
 }

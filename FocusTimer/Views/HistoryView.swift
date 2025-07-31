@@ -60,12 +60,14 @@ struct HistoryView: View {
     }
     
     func deleteItem(at offsets: IndexSet) {
-        print("HistoryView(b): \(sessionViewModel.getSessions())")
+//        print("HistoryView(b): \(sessionViewModel.getSessions())")
         sessions.remove(atOffsets: offsets)
         sessionViewModel.setSessions(sessions)
         sessionViewModel.saveSession()
-        isDelete = true
-        print("HistoryView(a): \(sessionViewModel.getSessions())")
+        if sessions.isEmpty {
+            isDelete = true
+        }
+//        print("HistoryView(a): \(sessionViewModel.getSessions())")
     }
 }
 

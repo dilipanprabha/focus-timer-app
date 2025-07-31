@@ -19,7 +19,7 @@ class TimerExtract {
     }
 
     func secLimit(count: Int) -> Int {
-        print("\(hours)H : \(minutes)m : \(seconds)s")
+//        print("\(hours)H : \(minutes)m : \(seconds)s")
         if (seconds == 0 && minutes == 0 && hours == 0) {
             return 0
         }
@@ -60,8 +60,8 @@ class TimerExtract {
         hours = 0
         minutes = 0
         seconds = 0
-        print("MakeTimeZero in TimeExtract called")
-        print("h: \(hours); m: \(minutes); s: \(seconds)")
+//        print("MakeTimeZero in TimeExtract called")
+//        print("h: \(hours); m: \(minutes); s: \(seconds)")
     }
     
     func getCurrentSecond() -> Int {

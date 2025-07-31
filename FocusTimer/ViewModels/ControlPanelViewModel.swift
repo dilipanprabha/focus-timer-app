@@ -33,6 +33,7 @@ class ControlPanelViewModel {
     }
 
     func resetFun(_ timerViewModel: TimerViewModel) -> Void {
+        print("reset clicked")
         timerViewModel.timerReset()
         timerViewModel.warningVibration()
     }

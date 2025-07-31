@@ -18,6 +18,7 @@ class TimerViewModel: ObservableObject {
     private var completedTime: Date?
     private var timerExtract: TimerExtract?
     private var sessionViewModel: SessionViewModel = SessionViewModel()
+    private var goalManager: GoalManager = GoalManager()
     private var timer: Timer.TimerPublisher = Timer.publish(every: 1, on: .main, in: .common)
     private var cancellable: Cancellable?
     @Published private var hours: Int
@@ -29,14 +30,14 @@ class TimerViewModel: ObservableObject {
         self.hours = 0
         self.minutes = 0
         self.seconds = 0
-        print("Empty init: Timer View Model is initialized")
+//        print("Empty init: Timer View Model is initialized")
     }
     
     init(hours: Int, minutes: Int, seconds: Int) {
         self.hours = hours
         self.minutes = minutes
         self.seconds = seconds
-        print("Parametarized init: Timer View Model is initialized")
+//        print("Parametarized init: Timer View Model is initialized")
     }
     
     func getHour() -> Int {
@@ -44,7 +45,7 @@ class TimerViewModel: ObservableObject {
     }
     
     func setHour(_ hour: Int) -> Void {
-        print("TimerViewModel: \(hour)hour is set")
+//        print("TimerViewModel: \(hour)hour is set")
         self.hours = hour
     }
     
@@ -53,7 +54,7 @@ class TimerViewModel: ObservableObject {
     }
     
     func setMinute(_ minute: Int) -> Void {
-        print("TimerViewModel: \(minute)minute is set")
+//        print("TimerViewModel: \(minute)minute is set")
         self.minutes = minute
     }
     
@@ -62,8 +63,12 @@ class TimerViewModel: ObservableObject {
     }
     
     func setSecond(_ second: Int) -> Void {
-        print("TimerViewModel: \(second)second is set")
+//        print("TimerViewModel: \(second)second is set")
         self.seconds = second
+    }
+    
+    func getCompletedTime() -> Date {
+        return completedTime!
     }
     
     // return current hour
@@ -105,16 +110,12 @@ class TimerViewModel: ObservableObject {
         totalSeconds = totalSeconds == 0 ? (hours * 60 * 60) + (minutes * 60) + seconds : totalSeconds
         timerExtract = TimerExtract(hours: hours, minutes: minutes, seconds: seconds)
         completedTime = timerExtract?.completedAt(startTime!, getCurrentSecond())
-        print("Starting Time: \(printTime(startTime!))")
-        print("Ending Time: \(printTime(completedTime!))")
-        print("Total Seconds: \(totalSeconds)")
     }
     
     // cancel timer and start timer
     func timerStop() -> Void {
         cancellable?.cancel()
         cancellable = nil
-        id = nil
         timer = Timer.publish(every: 1, on: .main, in: .common)
         isTimerRunning = false
     }
@@ -130,9 +131,12 @@ class TimerViewModel: ObservableObject {
     
     func timerCompleted() -> Void {
         isStarted = false
+        
         sessionViewModel.loadSession()
         sessionViewModel.addSession(id!, totalSeconds, completedTime!, true)
         sessionViewModel.saveSession()
+        goalManager.goalAdd(totalSeconds)
+        goalManager.isReached()
         timerStop()
     }
     

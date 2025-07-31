@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct FocusTimerApp: App {
+    
+    @AppStorage("appearance") private var appearance: String = "system"
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .preferredColorScheme(appearance == "dark" ? .dark :
+                                        appearance == "light" ? .light : nil)
         }
     }
 }

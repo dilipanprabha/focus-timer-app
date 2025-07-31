@@ -13,10 +13,11 @@ struct NavigationalView: View {
     @State private var isDelete: Bool = false
     @State private var offsetValue: CGFloat = 0.0
     @State private var sessions: [Session]
+//    @Binding var isClicked: Bool
     @ObservedObject var timerViewModel: TimerViewModel
     
     init(timerViewModel: TimerViewModel) {
-//        self.sessionViewModel = SessionViewModel()
+        
         self.timerViewModel = timerViewModel
         _sessions = State(wrappedValue: sessionViewModel.getSessions())
         print("sessionsIn Nav: \(_sessions)")
@@ -26,17 +27,21 @@ struct NavigationalView: View {
         HStack {
             if sessions.isEmpty && !isDelete {
                 NavigationLink(value: "Nothing is here!🙈") {
-                    HStack(alignment: .center) {
-                        Text("Go to Details")
+                    HStack(spacing: 4) {
+                        Image(systemName: "clock.arrow.circlepath") // or "list.bullet"
+                        Text("View Session History")
                     }
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                    .underline()
                     .navigationDestination(for: String.self) { value in
                         Text(value)
                     }
                 }
             } else {
                 NavigationLink(value: "") {
-                    HStack(alignment: .center) {
-                        Text("Go to Details")
+                    HStack(alignment: .center, spacing: 4) {
+                        Text("View Session History")
                         Image(systemName: "chevron.right")
                             .offset(x: offsetValue)
                             .onAppear() {
@@ -45,12 +50,14 @@ struct NavigationalView: View {
                                 }
                             }
                     }
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                    .underline()
                     .navigationDestination(for: String.self, destination: {_ in
                         HistoryView(isDelete: $isDelete, sessions: $sessions, timerViewModel: timerViewModel)
                     })
                 }
             }
         }
-        .padding(EdgeInsets(top: 20, leading: 0, bottom: 0, trailing: 0))
     }
 }
