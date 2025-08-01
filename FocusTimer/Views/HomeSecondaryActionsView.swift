@@ -1,28 +1,13 @@
-//
-//  NavigationalView.swift
-//  FocusTimer
-//
-//  Created by Dilipan Prabha on 28/07/25.
-//
-
 import SwiftUI
 
-struct NavigationalView: View {
+struct HomeSecondaryActionsView: View {
     
-    private let sessionViewModel: SessionViewModel = SessionViewModel()
+    @Binding var sessions: [Session]
     @State private var isDelete: Bool = false
+    @State private var animate: Bool = false
     @State private var offsetValue: CGFloat = 0.0
-    @State private var sessions: [Session]
-//    @Binding var isClicked: Bool
     @ObservedObject var timerViewModel: TimerViewModel
-    
-    init(timerViewModel: TimerViewModel) {
-        
-        self.timerViewModel = timerViewModel
-        _sessions = State(wrappedValue: sessionViewModel.getSessions())
-        print("sessionsIn Nav: \(_sessions)")
-    }
-    
+
     var body: some View {
         HStack {
             if sessions.isEmpty && !isDelete {
@@ -36,6 +21,16 @@ struct NavigationalView: View {
                     .underline()
                     .navigationDestination(for: String.self) { value in
                         Text(value)
+                            .font(.system(size: 20, weight: .bold))
+                            .multilineTextAlignment(.center)
+                            .padding()
+                            .scaleEffect(animate ? 1 : 0.9)
+                            .opacity(animate ? 1 : 0)
+                            .onAppear {
+                                withAnimation(.easeOut(duration: 0.6)) {
+                                    animate = true
+                                }
+                            }
                     }
                 }
             } else {

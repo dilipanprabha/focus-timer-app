@@ -2,9 +2,6 @@ import SwiftUI
 
 struct CountdownDisplayView: View {
     
-//    @Binding var hours: Int
-//    @Binding var minutes: Int
-//    @Binding var seconds: Int
     @Binding var isStart: Bool
     @ObservedObject var timerViewModel: TimerViewModel
     @AppStorage("isVibration") private var isVibration: Bool = true
@@ -20,7 +17,6 @@ struct CountdownDisplayView: View {
             }
             .font(.footnote)
             .opacity(0.5)
-//            .foregroundStyle(timerViewModel.isTimerRun() ? .primary : .secondary)
             .foregroundColor(.secondary)
             .padding(.top, 20)
 
@@ -63,7 +59,11 @@ struct CountdownDisplayView: View {
         .background(.ultraThinMaterial)
         .clipShape(Circle())
         .shadow(color: Color.sprinBudCol.opacity(0.7), radius: 9)
-        .overlay(Circle().trim(from: 0, to: 1).stroke(colorScheme == .dark ? Color.white.opacity(0.08) : Color.gray.opacity(0.15), style: StrokeStyle(lineWidth: 12, lineCap: .round)))
+        .overlay(
+            Circle()
+                .trim(from: 0, to: 1)
+                .stroke(colorScheme == .dark ? Color.white.opacity(0.08) : Color.gray.opacity(0.15), style: StrokeStyle(lineWidth: 12, lineCap: .round))
+        )
         .overlay(Circle()
             .trim(from: 0, to: timerViewModel.getProgress())
             .stroke(
@@ -74,26 +74,22 @@ struct CountdownDisplayView: View {
                 style: StrokeStyle(lineWidth: 14, lineCap: .round)
             )
             .rotationEffect(.degrees(-90))
-            .shadow(color: Color.purple.opacity(0.5), radius: 10, x: 0, y: 0))
+            .shadow(color: Color.purple.opacity(0.5), radius: 10, x: 0, y: 0)
+        )
         .shadow(color: Color.purple.opacity(0.5), radius: 10, x: 0, y: 0)
         .animation(.linear(duration: 1), value: timerViewModel.getProgress())
         .onReceive(timerViewModel.getTimerPublish()!, perform: {_ in
-//                print("onReceive triggered")
                 if timerViewModel.isTimeZero() {
                     isStart = false
                     timerViewModel.timerCompleted()
-//                    timerViewModel.timerReset()
                     if isVibration {
                         timerViewModel.successVibration()
                     }
                     return
                 }
                 
-//                hours = timerViewModel.currentHour()
                 timerViewModel.setHour(timerViewModel.currentHour())
-//    //                minutes = timerViewModel.currentMinute()
                 timerViewModel.setMinute(timerViewModel.currentMinute())
-//    //                seconds = timerViewModel.currentSecond()
                 timerViewModel.setSecond(timerViewModel.currentSecond())
             })
     }

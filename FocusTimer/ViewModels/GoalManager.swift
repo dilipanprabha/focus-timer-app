@@ -1,10 +1,3 @@
-//
-//  GoalManager.swift
-//  FocusTimer
-//
-//  Created by Dilipan Prabha on 31/07/25.
-//
-
 import Foundation
 import SwiftUI
 
@@ -14,77 +7,61 @@ class GoalManager {
     private var streak: Int = 0
     private var date: [Date] = []
     private var isGoalReached: Bool = false
-    @AppStorage("dailyFocusGoal") private var dailyFocusGoal: Int = 4
+    private var dailyFocusGoal: Int = 4
+    private var selectedSession: Int = 25
     
-    
-    
-//    func delAll() -> Void {
-//        loadDate()
-//        date.removeAll()
-////        date.append(Calendar.current.date(byAdding: .day, value: -1, to: Date())!)
-//        saveDate()
-//        loadGoal()
-//        goal = 0
-//        saveGoal()
-//        loadStreak()
-//        streak = 0
-//        saveStreak()
-//        loadIsGoalReached()
-//        isGoalReached = false
-//        saveIsGoalReached()
-//    }
-    
-    
-//    func getGoal() -> Int {
-//        return goal
-//    }
-//    
-//    func getStreak() -> Int {
-//        return streak
-//    }
+    func delAll() -> Void {
+        date.removeAll()
+        saveDate()
+        
+        goal = 0
+        saveGoal()
+        
+        streak = 0
+        saveStreak()
+        
+        isGoalReached = false
+        saveIsGoalReached()
+    }
     
     func goalAdd(_ totalSeconds: Int) -> Void {
-        if totalSeconds < 600 {
+        loadSelectedSession()
+        if totalSeconds < selectedSession {
             return
         }
         
-        if totalSeconds >= 600 {
-//            print("GoalManager (goalAdd()): goal-\(goal)")
+        if totalSeconds >= selectedSession {
+            loadGoal()
             goal += 1
+            saveGoal()
         }
     }
 
     func isReached() -> Void {
         loadIsGoalReached()
+        loadDailyFocusGoal()
         
         if isGoalReached {
-//            print("GoalManager (isReached()): goal is already reached")
             return
         }
         
         if goal < dailyFocusGoal {
-//            print("GoalManager (isReached()): less than 4 [goal-\(goal)]")
             return
         }
         
-//        print("(isReached()) : now goal is 4")
         isGoalReached = true
         
         loadDate()
         
-//        print("GoalManager(before load) (isReached()): date-\(date)")
         if let lastElement = date.last {
             streakCount(lastElement)
         } else {
             loadStreak()
-//            print("GoalManager(before load) (isReached()): streak-\(streak)")
             streak = 1
-//            print("GoalManager(after load) (isReached()): streak-\(streak)")
             saveStreak()
         }
         
         date.append(Date())
-//        print("GoalManager(after load) (isReached()): date-\(date)")
         saveDate()
         
         saveIsGoalReached()
@@ -96,23 +73,32 @@ class GoalManager {
         let isYesterday = calendar.isDateInYesterday(yesterday)
         
         if !isYesterday {
-//            print("GoalManager (streakCount()): you missed yesterday")
             loadStreak()
-//            print("GoalManager(before load) (streakCount()): streak-\(streak)")
             streak = 1
-//            print("GoalManager(after load)  (streakCount()): streak-\(streak)")
             saveStreak()
             
             return
         }
-//        print("GoalManager (streakCount()): you did yesterday")
         loadStreak()
-//        print("GoalManager(before load) (streakCount()): streak-\(streak)")
         streak += 1
-//        print("GoalManager(after load) (streakCount()): streak-\(streak)")
         saveStreak()
     }
     
+    func saveSelectedSession() -> Void {
+        UserDefaults.standard.set(isGoalReached, forKey: "selectedSession")
+    }
+    
+    func loadSelectedSession() -> Void {
+        selectedSession = (Int(UserDefaults.standard.string(forKey: "selectedSession") ?? "\(selectedSession)") ?? selectedSession) * 60
+    }
+    
+    func saveDailyFocusGoal() -> Void {
+        UserDefaults.standard.set(isGoalReached, forKey: "dailyFocusGoal")
+    }
+    
+    func loadDailyFocusGoal() -> Void {
+        dailyFocusGoal = UserDefaults.standard.integer(forKey: "dailyFocusGoal")
+    }
     
     func saveIsGoalReached() -> Void {
         UserDefaults.standard.set(isGoalReached, forKey: "isGoalReached")
@@ -144,7 +130,6 @@ class GoalManager {
         let data = try? encoder.encode(date)
         
         UserDefaults.standard.set(data, forKey: "date")
-        print("GoalManager: Date added")
     }
     
     func loadDate() -> Void {

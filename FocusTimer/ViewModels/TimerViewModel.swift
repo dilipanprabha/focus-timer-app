@@ -1,20 +1,13 @@
-//
-//  TimerViewModel.swift
-//  FocusTimer
-//
-//  Created by Dilipan Prabha on 27/07/25.
-//
 import SwiftUI
 import Combine
 
 class TimerViewModel: ObservableObject {
     
-    private var id: UUID?
     private var count: Int = 1
     private var progress: Double =  0
     private var totalSeconds: Int = 0
     private var isStarted: Bool = false
-    private var startTime: Date?
+    private var startTime: Date? = nil
     private var completedTime: Date?
     private var timerExtract: TimerExtract?
     private var sessionViewModel: SessionViewModel = SessionViewModel()
@@ -30,14 +23,12 @@ class TimerViewModel: ObservableObject {
         self.hours = 0
         self.minutes = 0
         self.seconds = 0
-//        print("Empty init: Timer View Model is initialized")
     }
     
     init(hours: Int, minutes: Int, seconds: Int) {
         self.hours = hours
         self.minutes = minutes
         self.seconds = seconds
-//        print("Parametarized init: Timer View Model is initialized")
     }
     
     func getHour() -> Int {
@@ -45,7 +36,6 @@ class TimerViewModel: ObservableObject {
     }
     
     func setHour(_ hour: Int) -> Void {
-//        print("TimerViewModel: \(hour)hour is set")
         self.hours = hour
     }
     
@@ -54,7 +44,6 @@ class TimerViewModel: ObservableObject {
     }
     
     func setMinute(_ minute: Int) -> Void {
-//        print("TimerViewModel: \(minute)minute is set")
         self.minutes = minute
     }
     
@@ -63,7 +52,6 @@ class TimerViewModel: ObservableObject {
     }
     
     func setSecond(_ second: Int) -> Void {
-//        print("TimerViewModel: \(second)second is set")
         self.seconds = second
     }
     
@@ -102,14 +90,19 @@ class TimerViewModel: ObservableObject {
     
     // start Timer Publish, connect it, and extract timerExtract
     func timerStart() -> Void {
-        startTime = Date()
-        id = UUID()
-        cancellable = timer.connect()
-        isTimerRunning = true
+        progress = 0
         isStarted = true
-        totalSeconds = totalSeconds == 0 ? (hours * 60 * 60) + (minutes * 60) + seconds : totalSeconds
+        startTime = Date()
+        isTimerRunning = true
+        cancellable = timer.connect()
+        totalSeconds = (hours * 60 * 60) + (minutes * 60) + seconds
         timerExtract = TimerExtract(hours: hours, minutes: minutes, seconds: seconds)
         completedTime = timerExtract?.completedAt(startTime!, getCurrentSecond())
+    }
+    
+    func timerResume() -> Void {
+        isTimerRunning = true
+        cancellable = timer.connect()
     }
     
     // cancel timer and start timer
@@ -121,10 +114,9 @@ class TimerViewModel: ObservableObject {
     }
     
     func timerReset() -> Void {
-//        timerExtract?.makeTimerZero()
         isStarted = false
         sessionViewModel.loadSession()
-        sessionViewModel.addSession(id!, totalSeconds, completedTime!, false)
+        sessionViewModel.addSession(totalSeconds, startTime!, false)
         sessionViewModel.saveSession()
         timerStop()
     }
@@ -133,7 +125,7 @@ class TimerViewModel: ObservableObject {
         isStarted = false
         
         sessionViewModel.loadSession()
-        sessionViewModel.addSession(id!, totalSeconds, completedTime!, true)
+        sessionViewModel.addSession(totalSeconds, completedTime!, true)
         sessionViewModel.saveSession()
         goalManager.goalAdd(totalSeconds)
         goalManager.isReached()
@@ -148,14 +140,12 @@ class TimerViewModel: ObservableObject {
         let generator = UINotificationFeedbackGenerator()
         generator.prepare()
         generator.notificationOccurred(.success)
-        print("🔔 Success vibrate now!")
     }
     
     func warningVibration() -> Void {
         let generator = UINotificationFeedbackGenerator()
         generator.prepare()
         generator.notificationOccurred(.warning)
-        print("🔔 Warning vibrate now!")
     }
     
     func isTimeZero() -> Bool {
@@ -184,27 +174,5 @@ class TimerViewModel: ObservableObject {
     
     func printTime(_ date: Date) -> String {
         return date.formatted(date: .complete, time: .complete)
-    }
-    
-    func getTimeString(_ seconds: Int) -> String {
-        let time: [Int] = [seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60]
-        
-        let hour = time[0]
-        let minute = time[1]
-        let second = time[2]
-        
-        if (hour != 0 && second != 0) {
-            return "\(hour) hr \(minute) min \(second) sec"
-        } else if (hour != 0 && second == 0) {
-            return "\(hour) hr \(minute) min"
-        } else if (minute != 0 && second != 0) {
-            return "\(minute) min \(second) sec"
-        } else if (minute != 0 && second == 0) {
-            return "\(minute) min"
-        } else if (second != 0) {
-            return "\(second) sec"
-        } else {
-            return ""
-        }
     }
 }

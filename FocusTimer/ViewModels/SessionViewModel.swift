@@ -1,14 +1,7 @@
-//
-//  Untitled.swift
-//  FocusTimer
-//
-//  Created by Dilipan Prabha on 28/07/25.
-//
-
 import Foundation
 
 class SessionViewModel: ObservableObject {
-    private var sessions: [Session] = []
+    @Published private var sessions: [Session] = []
     
     func getSessions() -> [Session] {
         loadSession()
@@ -19,33 +12,15 @@ class SessionViewModel: ObservableObject {
         sessions = session
     }
     
-    func addSession(_ id: UUID, _ duration: Int, _ date: Date, _ isCompleted: Bool) {
-        let newSession = Session(id: id, duration: duration, completed: date, isFinished: isCompleted)
+    func addSession(_ duration: Int, _ date: Date, _ isCompleted: Bool) {
+        let newSession = Session(id: UUID(), duration: duration, completed: date, isFinished: isCompleted)
         sessions.append(newSession)
     }
     
-    func updateSession(id: UUID, date: Date) -> Void {
-        if sessions.isEmpty {
-            return
-        }
-        
-        if let index = sessions.firstIndex(where: { $0.id == id }) {
-            sessions[index].completed = date
-        }
-    }
-    
-    func deleteSession(id: UUID) -> Void {
-        if sessions.isEmpty {
-            return
-        }
-        
-        if let index = sessions.firstIndex(where: { $0.id == id }) {
-            sessions.remove(at: index)
-        }
-    }
-    
     func deleteAll() -> Void {
+
         sessions.removeAll()
+
     }
 
     func saveSession() -> Void {
@@ -54,7 +29,6 @@ class SessionViewModel: ObservableObject {
         let data = try? encoder.encode(sessions)
         
         UserDefaults.standard.set(data, forKey: "sessions")
-        print("SessionViewModel: Session added")
     }
     
     func loadSession() -> Void {
@@ -71,5 +45,27 @@ class SessionViewModel: ObservableObject {
             return
         }
         sessions = []
+    }
+    
+    func getTimeString(_ seconds: Int) -> String {
+        let time: [Int] = [seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60]
+        
+        let hour = time[0]
+        let minute = time[1]
+        let second = time[2]
+        
+        if (hour != 0 && second != 0) {
+            return "\(hour) hr \(minute) min \(second) sec"
+        } else if (hour != 0 && second == 0) {
+            return "\(hour) hr \(minute) min"
+        } else if (minute != 0 && second != 0) {
+            return "\(minute) min \(second) sec"
+        } else if (minute != 0 && second == 0) {
+            return "\(minute) min"
+        } else if (second != 0) {
+            return "\(second) sec"
+        } else {
+            return ""
+        }
     }
 }

@@ -1,19 +1,12 @@
-//
-//  RunningTimerView.swift
-//  FocusTimer
-//
-//  Created by Dilipan Prabha on 30/07/25.
-//
-
 import SwiftUI
 
 struct RunningTimerView: View {
     
-    private let controlPanelViewModel = ControlPanelViewModel()
     @Binding var isStart: Bool
     @ObservedObject var timerViewModel: TimerViewModel
+    @AppStorage("isVibration") private var isVibration: Bool = true
     @Environment(\.colorScheme) var colorScheme
-    
+    private let controlPanelViewModel = ControlPanelViewModel()
     
     var body: some View {
         
@@ -54,7 +47,7 @@ struct RunningTimerView: View {
                 Button(action: {
                     timerViewModel.setTimer(hours: 0, minutes: 0, seconds: 0)
                     isStart = false
-                    controlPanelViewModel.resetFun(timerViewModel)
+                    controlPanelViewModel.resetFun(isVibration, timerViewModel)
                 }) {
                     Text("RESET")
                         .font(.headline)

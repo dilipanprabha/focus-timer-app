@@ -1,10 +1,3 @@
-//
-//  GreetingViewModel.swift
-//  FocusTimer
-//
-//  Created by Dilipan Prabha on 31/07/25.
-//
-
 import Foundation
 
 class GreetingViewModel {
@@ -17,7 +10,6 @@ class GreetingViewModel {
         let hour     = calendar.component(.hour, from: date)
 //        let minutes  = calendar.component(.minute, from: date)
         let morning = 5; let afternoon=12; let evening=17; let night=21;
-        print("Hour: \(hour)")
         if hour == morning || (hour > morning && hour < afternoon) {
             greeting = "☀️ Good Morning! Ready to focus?"
         } else if hour == afternoon || (hour > afternoon && hour < evening) {

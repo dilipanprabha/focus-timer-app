@@ -1,13 +1,6 @@
-//
-//  StartButton.swift
-//  FocusTimer
-//
-//  Created by Dilipan Prabha on 31/07/25.
-//
-
 import SwiftUI
 
-struct StartButton: View {
+struct HomeStartButtonView: View {
     
     @State private var isPressed = false
     var action: () -> Void

@@ -1,15 +1,9 @@
-//
-//  HistoryView.swift
-//  FocusTimer
-//
-//  Created by Dilipan Prabha on 28/07/25.
-//
-
 import SwiftUI
 
 struct HistoryView: View {
     
     var sessionViewModel = SessionViewModel()
+    @State private var animate: Bool = false
     @State private var showAlert = false
     @Binding var isDelete: Bool
     @Binding var sessions: [Session]
@@ -19,17 +13,27 @@ struct HistoryView: View {
         VStack {
             if isDelete {
                 Text("Nothing is here!")
+                    .font(.system(size: 20, weight: .bold))
+                    .multilineTextAlignment(.center)
+                    .padding()
+                    .scaleEffect(animate ? 1 : 0.9)
+                    .opacity(animate ? 1 : 0)
+                    .onAppear {
+                        withAnimation(.easeOut(duration: 0.6)) {
+                            animate = true
+                        }
+                    }
                     .onDisappear() {
                         isDelete = false
                     }
             } else {
                 List {
-                    ForEach(sessions) { session in
+                    ForEach(sessions.reversed()) { session in
                         
                         if session.isFinished {
-                            Text("✅ Focused \( timerViewModel.getTimeString( session.duration ) ) at \( session.completed.formatted(date: .omitted, time: .shortened) )")
+                            Text("✅ Focused \( sessionViewModel.getTimeString( session.duration ) ) at \( session.completed.formatted(date: .omitted, time: .shortened) )")
                         } else {
-                            Text("❌ Unfocused (\( timerViewModel.getTimeString( session.duration ) )) at \( session.completed.formatted(date: .omitted, time: .shortened) )")
+                            Text("❌ Unfocused (\( sessionViewModel.getTimeString( session.duration ) )) at \( session.completed.formatted(date: .omitted, time: .shortened) )")
                         }
                     }
                     .onDelete(perform: deleteItem)
@@ -45,12 +49,10 @@ struct HistoryView: View {
                 .alert("Warning", isPresented: $showAlert) {
                     Button("Cancel", role: .cancel) { }
                     Button("Delete", role: .destructive) {
+                        isDelete = true
                         sessions.removeAll()
-                        sessionViewModel.loadSession()
                         sessionViewModel.deleteAll()
                         sessionViewModel.saveSession()
-                        isDelete = true
-                        print("Item deleted.")
                     }
                 } message: {
                     Text("This will remove all your focus history. Are you sure you want to continue?")
@@ -60,14 +62,12 @@ struct HistoryView: View {
     }
     
     func deleteItem(at offsets: IndexSet) {
-//        print("HistoryView(b): \(sessionViewModel.getSessions())")
         sessions.remove(atOffsets: offsets)
         sessionViewModel.setSessions(sessions)
         sessionViewModel.saveSession()
         if sessions.isEmpty {
             isDelete = true
         }
-//        print("HistoryView(a): \(sessionViewModel.getSessions())")
     }
 }
 
