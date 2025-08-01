@@ -1,9 +1,4 @@
-//
-//  TimerExtract.swift
-//  FocusTimer
-//
-//  Created by Dilipan Prabha on 26/07/25.
-//
+import Foundation
 
 class TimerExtract {
     private var hours: Int
@@ -17,7 +12,6 @@ class TimerExtract {
     }
 
     func secLimit(count: Int) -> Int {
-        print("\(hours)H : \(minutes)m : \(seconds)s")
         if (seconds == 0 && minutes == 0 && hours == 0) {
             return 0
         }
@@ -53,5 +47,20 @@ class TimerExtract {
         
         return hours / 3600
     }
-
+    
+    func makeTimerZero() -> Void {
+        hours = 0
+        minutes = 0
+        seconds = 0
+    }
+    
+    func getCurrentSecond() -> Int {
+        return hours
+    }
+    
+    func completedAt(_ date: Date, _ totalSeconds: Int) -> Date {
+        let calendar = Calendar.current
+        let expectedDate = calendar.date(byAdding: .second, value: totalSeconds, to: date)
+        return expectedDate!
+    }
 }
