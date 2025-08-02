@@ -9,7 +9,7 @@ class GoalManager {
     private var isGoalReached: Bool = false
     private var dailyFocusGoal: Int = 4
     private var selectedSession: Int = 25
-    
+        
     func delAll() -> Void {
         date.removeAll()
         saveDate()
@@ -26,11 +26,11 @@ class GoalManager {
     
     func goalAdd(_ totalSeconds: Int) -> Void {
         loadSelectedSession()
-        if totalSeconds < selectedSession {
+        if totalSeconds < (selectedSession * 60) {
             return
         }
         
-        if totalSeconds >= selectedSession {
+        if totalSeconds >= (selectedSession * 60) {
             loadGoal()
             goal += 1
             saveGoal()
@@ -89,7 +89,7 @@ class GoalManager {
     }
     
     func loadSelectedSession() -> Void {
-        selectedSession = (Int(UserDefaults.standard.string(forKey: "selectedSession") ?? "\(selectedSession)") ?? selectedSession) * 60
+        selectedSession = (Int(UserDefaults.standard.string(forKey: "selectedSession") ?? "\(selectedSession)") ?? selectedSession)
     }
     
     func saveDailyFocusGoal() -> Void {

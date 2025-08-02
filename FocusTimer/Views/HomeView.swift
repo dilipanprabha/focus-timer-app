@@ -28,7 +28,7 @@ struct HomeView: View {
             GeometryReader { geo in
                 VStack(spacing: 16) {
                     
-                    HomeHeaderView(streak: $streak, sessions: $sessions)
+                    HomeHeaderView(streak: $streak, sessions: $sessions, minutes: $minutes)
                     
                     HomeGreetingView(goal: $goal, fade: $fade, greeting: $greeting)
                     

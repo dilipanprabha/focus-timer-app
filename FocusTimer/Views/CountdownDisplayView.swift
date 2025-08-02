@@ -27,11 +27,13 @@ struct CountdownDisplayView: View {
                 
                 Text((timerViewModel.getHour() < 10 && timerViewModel.getHour() >= 0) ? "0\(timerViewModel.getHour())" : "\(timerViewModel.getHour())")
                     .foregroundStyle(timerViewModel.getCurrentSecond() <= 10 ? .red.opacity(0.6) : .primary)
+                    .animation(nil)
                 
                 Text(" : ")
                     .font(.custom("xxlarge", size: 50))
                 
                 Text((timerViewModel.getMinute() < 10 && timerViewModel.getMinute() >= 0) ? "0\(timerViewModel.getMinute())" : "\(timerViewModel.getMinute())")
+                    .animation(nil)
                     .padding(.vertical)
                     .foregroundStyle(timerViewModel.getCurrentSecond() <= 10 ? .red.opacity(0.6) : .primary)
                 
@@ -39,6 +41,7 @@ struct CountdownDisplayView: View {
                     .font(.custom("xxlarge", size: 50))
                 
                 Text((timerViewModel.getSecond() < 10 && timerViewModel.getSecond() >= 00) ? "0\(timerViewModel.getSecond())" : "\(timerViewModel.getSecond())")
+                    .animation(nil)
                     .foregroundStyle(timerViewModel.getCurrentSecond() <= 10 ? .red.opacity(0.6) : .primary)
                 
             }

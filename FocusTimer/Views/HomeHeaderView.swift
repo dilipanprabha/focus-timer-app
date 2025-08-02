@@ -4,6 +4,7 @@ struct HomeHeaderView: View {
     
     @Binding var streak: Int
     @Binding var sessions: [Session]
+    @Binding var minutes: String
     @State private var showSheet = false
     @AppStorage("appearance") private var appearance: String = "system"
     
@@ -30,7 +31,7 @@ struct HomeHeaderView: View {
             }
             .sheet(isPresented: $showSheet) {
                 
-                SettingsView(sessions: $sessions, onDismiss: {
+                SettingsView(sessions: $sessions, minutes: $minutes, onDismiss: {
                     showSheet = false
                 })
                     .id(appearance)

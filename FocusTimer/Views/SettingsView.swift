@@ -5,6 +5,7 @@ struct SettingsView: View {
     @State private var showSheet = false
     @State private var showAlert = false
     @Binding var sessions: [Session]
+    @Binding var minutes: String
     @AppStorage("dailyFocusGoal") private var dailyFocusGoal: Int = 4
     @AppStorage("isVibration") private var isVibration: Bool = true
     @AppStorage("selectedSession") private var selectedSession: String = "25"
@@ -38,6 +39,10 @@ struct SettingsView: View {
                         }
                     }
                     .pickerStyle(.automatic)
+                    .onChange(of: selectedSession) { _,_ in
+                        // Update minutes in homeview
+                        minutes = selectedSession
+                    }
                 }
                 
                 Section(header: Text("Appearance")) {
