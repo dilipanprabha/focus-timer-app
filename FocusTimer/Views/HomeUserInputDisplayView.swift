@@ -11,7 +11,6 @@ struct HomeUserInputDisplayView: View {
     @Binding var hours: String
     @Binding var minutes: String
     @Binding var seconds: String
-    @Binding var focusField: Field?
     @FocusState private var internalFocus: Field?
     
     var body: some View {

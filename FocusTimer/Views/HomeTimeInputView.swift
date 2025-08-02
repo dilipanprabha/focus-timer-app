@@ -8,14 +8,13 @@ struct HomeTimeInputView: View {
     @Binding var minutes: String
     @Binding var seconds: String
     @Binding var sessions: [Session]
-    @Binding var focusField: HomeUserInputDisplayView.Field?
     @ObservedObject var timerViewModel: TimerViewModel
     private let controlPanelViewModel = ControlPanelViewModel()
     
     var body: some View {
         
         VStack(spacing: 24) {
-            HomeUserInputDisplayView(hours: $hours, minutes: $minutes, seconds: $seconds, focusField: $focusField)
+            HomeUserInputDisplayView(hours: $hours, minutes: $minutes, seconds: $seconds)
             
             HomeStartButtonView() {
                 

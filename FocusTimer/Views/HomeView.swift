@@ -9,7 +9,6 @@ struct HomeView: View {
     @State private var hours: String = "00"
     @State private var minutes: String = "25"
     @State private var seconds: String = "00"
-    @State private var activeField: HomeUserInputDisplayView.Field? = nil
     @AppStorage("goal") var goal: Int = 0
     @AppStorage("streak") var streak: Int = 0
     @ObservedObject var timerViewModel: TimerViewModel
@@ -26,6 +25,7 @@ struct HomeView: View {
         
         NavigationStack {
             GeometryReader { geo in
+                
                 VStack(spacing: 16) {
                     
                     HomeHeaderView(streak: $streak, sessions: $sessions, minutes: $minutes)
@@ -35,15 +35,13 @@ struct HomeView: View {
                     Spacer()
                         .frame(height: geo.size.height * 0.1) // 10% space from top
                     
-                    HomeTimeInputView(isStart: $isStart, hours: $hours, minutes: $minutes, seconds: $seconds, sessions: $sessions, focusField: $activeField, timerViewModel: timerViewModel)
+                    HomeTimeInputView(isStart: $isStart, hours: $hours, minutes: $minutes, seconds: $seconds, sessions: $sessions, timerViewModel: timerViewModel)
 
                     Spacer()
                     
                 }
+                
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .onTapGesture {
-                    activeField = nil
-                }
                 .onAppear {
                     cycleGreetingMessages()
                 }
