@@ -1,0 +1,7 @@
+# Ignore user-specific settings
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+*.xcuserdatad
+
+# Derived data
+DerivedData/
